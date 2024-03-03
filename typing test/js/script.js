@@ -4,7 +4,13 @@ const accuracy = document.getElementById("accuracy");
 const test = document.getElementById("test");
 const testTime = document.getElementById("testTime");
 const gamePage = document.getElementById("gamePage");
-const themeList = ["theme_one", "theme_two", "theme_three", "theme_four","theme_five"];
+const themeList = [
+  "theme_one",
+  "theme_two",
+  "theme_three",
+  "theme_four",
+  "theme_five",
+];
 var arr = english_arr;
 
 window.timer = null;
@@ -62,7 +68,7 @@ var index;
 var err;
 
 // Generate next line of word
-function generate_next(){
+function generate_next() {
   let words = arr[Math.floor(Math.random() * arr.length)].split(" ");
   document.getElementById("words").innerHTML = ""; // clearing
   document.getElementById("cursor").style.left = 230 + "px";
@@ -86,6 +92,7 @@ const newGame = (dur) => {
   let words = arr[Math.floor(Math.random() * arr.length)].split(" ");
   index = 0;
   err = 0;
+  str = [];
   removeClass(resultBox, "result_div");
   addClass(resultBox, " hidden");
   document.getElementById("words").innerHTML = ""; // clearing
@@ -114,7 +121,7 @@ const newGame = (dur) => {
   addClass(document.querySelector(".letter"), "current");
 };
 
-var str=[];
+var str = [];
 var character_count = 0;
 
 const getWPM = () => {
@@ -122,20 +129,12 @@ const getWPM = () => {
   const lastTypedWord = document.querySelector(".word.current");
   const lastTypedWordIndex = allWords.indexOf(lastTypedWord);
   const typedWords = allWords.slice(0, lastTypedWordIndex);
-  const correctWords = typedWords.filter((word) => {
-    const letters = [...word.children];
-    const correctLetters = letters.filter((letter) =>
-      letter.className.includes("correct")
-    );
-    const incorrectLetters = letters.filter((letter) =>
-      letter.className.includes("error")
-    );
-    return incorrectLetters.length === 0;
-  });
 
-  const WPM = Math.floor((correctWords.length / gameTime) * 60000);
+  // Counting all typed words
+  const WPM = Math.floor((typedWords.length / gameTime) * 60000);
   return WPM + str.length;
 };
+
 
 var totalCharacters = 0;
 const getAccuracy = () => {
@@ -168,10 +167,11 @@ const toggleTheme = () => {
   }
 };
 
+var len;
 // handle typing correctness
 document.getElementById("game").addEventListener("keyup", (event) => {
   const key = event.key;
-  const len = document.getElementById("words").innerText.length;
+  len = document.getElementById("words").innerText.length;
   const currentWord = document.querySelector(".word.current");
   const currentLetter = document.querySelector(".letter.current");
   const expected = currentLetter?.innerHTML || " ";
@@ -220,7 +220,7 @@ document.getElementById("game").addEventListener("keyup", (event) => {
   if (isLetter) {
     character_count++;
     index++;
-    if(index>=len){
+    if (index >= len) {
       str1 = [...document.querySelectorAll(".word")];
       str = str.concat(str1);
       generate_next();
@@ -388,23 +388,23 @@ const toEnglish = document.getElementById("english");
 const toHindi = document.getElementById("hindi");
 
 toHindi.addEventListener("click", () => {
-	removeClass(toEnglish, "active");
-	addClass(toHindi, "active");
+  removeClass(toEnglish, "active");
+  addClass(toHindi, "active");
   arr = hindi_arr;
   testType = "Hindi | text";
-	clearInterval(timer);
-	gameOver();
-	newGame();
+  clearInterval(timer);
+  gameOver();
+  newGame();
 });
 
 toEnglish.addEventListener("click", () => {
-	removeClass(toHindi, "active");
-	addClass(toEnglish, "active");
+  removeClass(toHindi, "active");
+  addClass(toEnglish, "active");
   arr = english_arr;
   testType = "English | text";
-	clearInterval(timer);
-	gameOver();
-	newGame();
+  clearInterval(timer);
+  gameOver();
+  newGame();
 });
 
 toggleTheme();
